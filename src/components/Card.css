@@ -1,0 +1,11 @@
+.card {
+    border: 1px solid #b67777;
+    padding: 10px;
+    margin: 10px;
+  }
+  
+  .card img {
+    max-width: 100%;
+    height: auto;
+  }
+  

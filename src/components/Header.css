@@ -1,0 +1,9 @@
+.header {
+    background-color: #b65353;
+    padding: 10px;
+    text-align: center;
+  }
+  .header .logo {
+    width: 50px; 
+    height: auto; 
+  }
