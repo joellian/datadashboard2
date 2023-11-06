@@ -13,3 +13,16 @@
 .navbar {
   width: 100%;
 }
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #bc5656;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #1b1919;
+}

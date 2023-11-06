@@ -1,28 +1,40 @@
 import React, { useEffect, useState } from 'react';
-import List from './List';
-import SearchBar from './SearchBar'
+import BookList from './BookList';
 import './DataDashboard.css';
+import Filter from './Filter';
+import { Link } from 'react-router-dom';
 
-const DataDashboard = () => {
+const DataDashboard = ({ searchTerm, clearSearch }) => {
   const [books, setBooks] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
+
+const clearBooks = () => {
+    setBooks([]);
+  };
+  const [selectedGenre, setSelectedGenre] = useState('');  
+  const handleGenreSelect = (event) => {
+    setSelectedGenre(event.target.value);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(`http://openlibrary.org/search.json?title=${searchTerm}`);
       const data = await response.json();
-      setBooks(data.docs);
+      let fetchedBooks = data.docs;
+  
+     
+      if (selectedGenre) {
+        fetchedBooks = fetchedBooks.filter(book => book.subject && book.subject.includes(selectedGenre));
+      }
+  
+      setBooks(fetchedBooks);
     };
-
+  
     if (searchTerm) {
       fetchData();
+    } else {
+      clearBooks();
     }
-  }, [searchTerm]);
-
-  const handleSearch = (term) => {
-    setSearchTerm(term);
-  };
-
+  }, [searchTerm, selectedGenre]); 
 
   const totalBooks = books.length;
 
@@ -40,21 +52,27 @@ if (totalBooks > 0) {
 
   return (
     <div className="data-dashboard">
-      <h2>Please Enter a Book Selection:</h2>
-      <div className="search-bar">
-        <SearchBar onSearch={handleSearch} />
-      </div>
+  <div className="dashboard-and-filter">
+    {books.length > 0 && (
+      <>
+        <Filter selectedGenre={selectedGenre} handleGenreSelect={handleGenreSelect} />
+        <button onClick={clearSearch}>Dashboard</button>
+      </>
+    )}
+  </div>
       <div className="summary-statistics">
         <p>Total Books: {totalBooks}</p>
         <p>Average Year of Publication: {Math.round(avgPublicationYear)}</p>
         <p>Most Common Language: {mostCommonLanguage}</p>
       </div>
-      <div className="book-list">
-        <List books={books} />
-      </div>
-    </div>
+      {books.map((book, index) => (
+      <BookList book={book} key={book.edition_key || book.lccn || index} />
+      ))}
+
+  </div>
   );
 };
 
 export default DataDashboard;
+
 
