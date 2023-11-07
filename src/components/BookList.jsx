@@ -4,13 +4,12 @@ import './BookList.css';
 import { Link } from 'react-router-dom';
 
 const BookList = ({ book }) => {
-  // Extract the necessary details from the book object
+
   const title = book.title;
   const coverId = book.cover_i;
   const authorName = book.author_name ? book.author_name[0] : 'Unknown';
   const firstPublishYear = book.first_publish_year || 'N/A';
 
-  // Construct the URL for the cover image
   const coverImageUrl = `http://covers.openlibrary.org/b/id/${coverId}-M.jpg`;
 
   return (
